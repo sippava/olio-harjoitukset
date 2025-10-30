@@ -1,55 +1,69 @@
 #include <iostream>
+#include <stdexcept>  // tarvitaan runtime_erroria varten
+
+
+
 using namespace std;
 
-// Funktio, joka tulostaa summan
-void calcSum(int x, int y) {
-    cout << "Summa (calcSum): " << x + y << endl;
+void calcSum(int a, int b){
+    cout << "lukujen " << a << " ja " << b << " summa on  " << a+b << endl;
+
+
 }
 
-// Funktio, joka tulostaa osamäärän tai virheilmoituksen
-void calcDiv(int x, int y) {
-    if (y == 0) {
-        cout << "Virhe: nollalla ei voi jakaa (calcDiv)." << endl;
+void calcDiv (int a, int b){
+    if ( b == 0){
+        cout << " virheilmoitus " << b <<  endl;
     } else {
-        cout << "Osamäärä (calcDiv): " << static_cast<float>(x) / y << endl;
+    cout << "lukujen " << a << " ja " << b << " osamaara on  " << a/b << endl;
     }
+
+
 }
 
-// Funktio, joka palauttaa summan
-int retSum(int x, int y) {
-    return x + y;
+int retSum (int a, int b){
+    return a+b;
 }
 
-// Funktio, joka palauttaa osamäärän
-float retDiv(int x, int y) {
-    if (y == 0) {
-        return 0.0f; // vaihtoehtoisesti voisi heittää poikkeuksen
+float retDiv (int a, int b){
+    if ( b < 0){
+        throw std::runtime_error("jakaja ei saa olla negatiivinen.");
     }
-    return static_cast<float>(x) / y;
+    else{
+        return ((float)a / (float)b);
+    }
+
 }
 
-int main() {
-    int a, b;
 
-    cout << "Anna ensimmäinen kokonaisluku: ";
+
+int main()
+{
+
+    int a;
+    int b;
+
+    cout << "Anna eka luku" << endl;
     cin >> a;
-    cout << "Anna toinen kokonaisluku: ";
+    cout << "Anna toka luku" << endl;
     cin >> b;
+    cout << "Annoit luvut " << a << " ja " << b << endl;
 
-    // Tulostavat funktiot
-    calcSum(a, b);
-    calcDiv(a, b);
+    calcSum( a, b);
+    calcDiv( a, b);
+    int summa=retSum( a,b);
 
-    // Palauttavat funktiot
-    int summa = retSum(a, b);
-    float osamaara = retDiv(a, b);
 
-    cout << "Summa (retSum): " << summa << endl;
-    if (b != 0) {
-        cout << "Osamäärä (retDiv): " << osamaara << endl;
-    } else {
-        cout << "Osamäärä (retDiv): ei voida laskea, jakaja on nolla." << endl;
+    //jos try-lohkossa nousee runtime error, hypätään catch-lohkoon
+    try {
+        float result = retDiv(a,b);
+        cout << a << "/" <<  b << " = " << result << endl;
+    } catch (runtime_error& e) {
+        cout<<"Error: "<< e.what()<< endl;
     }
+
+
+
 
     return 0;
 }
